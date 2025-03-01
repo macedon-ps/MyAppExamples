@@ -1,0 +1,34 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <base href="/" />
+    <link rel="stylesheet" href="@Assets["lib/bootstrap/dist/css/bootstrap.min.css"]" />
+    <link rel="stylesheet" href="@Assets["app.css"]" />
+    <link rel="stylesheet" href="@Assets["BlazorAppValidation.styles.css"]" />
+    <ImportMap />
+    <link rel="icon" type="image/png" href="favicon.png" />
+    <HeadOutlet />
+</head>
+
+<body>
+    <Routes />
+
+    @* Пример 1. Встроенные компоненты ввода (см. Home.razor) *@
+    @* Пример 2. Компонент EditForm с атрибутом Model="@person" (см. Home.razor) *@
+    @* Пример 3. Компонент EditForm с атрибутом EditContext="editContext" (см. Home.razor) *@
+    @* Пример 4. Валидация на основе аннотаций данных (см. Home.razor и Percon.cs) *@
+    @* Пример 5. Валидация на основе аннотаций данных. Использование ErrorMessage (см. Home.razor и Percon.cs) *@
+    @* Пример 6. Валидация на основе аннотаций данных. Использование ErrorMessage. ValidationMessage для каждого поля ввода (см. Home.razor и Percon.cs) *@
+    @* Пример 7. Стилизация сообщений об ошибках в полях ввода (см. Home.razor и Percon.cs) *@
+    @* Пример 8. Программная валидация (см. Home.razor и Percon.cs) *@
+    @* Пример 9. Программная валидация 2. OnValidSubmit и OnInvalidSubmit (см. Home.razor и Percon.cs) *@
+    @* Пример 10. Отслеживание изменения состояния валидации *@
+    @* Пример 11. Кастомная валидация *@
+
+    <script src="_framework/blazor.web.js"></script>
+</body>
+
+</html>

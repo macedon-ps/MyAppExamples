@@ -1,0 +1,349 @@
+﻿@page "/"
+@using Microsoft.AspNetCore.Components.Web          @* выносятся в _Imports.razor *@
+@using Microsoft.AspNetCore.Components.Forms        @* выносятся в _Imports.razor *@
+@rendermode RenderMode.InteractiveServer
+
+<PageTitle>Home</PageTitle>
+
+@* 
+<h1>Hello, world!</h1>
+
+Welcome to your new app. 
+*@
+
+@* Пример 1. Встроенные компоненты ввода 
+
+<h2>Student</h2>
+<div>
+    <p>
+        Name:<br />
+        <InputText @bind-Value="student.Name" />
+    </p>
+    <p>
+        Age:<br />
+        <InputNumber @bind-Value="student.Age" />
+    </p>
+    <p>
+        Enrollment Date:<br />
+        <InputDate @bind-Value="student.EnrollmentDate" />
+    </p>
+    <p>
+        Has Work:<br />
+        <InputCheckbox @bind-Value="student.HasWork" />
+    </p>
+    <p>
+        <InputRadioGroup @bind-Value="student.Subject">
+            Subject: <br />
+            @foreach (var subject in subjects)
+            {
+                <InputRadio Value="@subject" />
+
+                @subject
+
+                <br />
+            }
+        </InputRadioGroup>
+    </p>
+    <p>
+        Courses:<br />
+        <InputSelect @bind-Value="student.Courses" multiple>
+            @foreach (var course in courses)
+            {
+                <option value="@course">@course</option>
+            }
+        </InputSelect>
+    </p>
+</div>
+<hr />
+<div>
+    <p>Name @student.Name</p>
+    <p>Age: @student.Age</p>
+    <p>Day: @student.EnrollmentDate.ToShortDateString()</p>
+    <p>Working: @student.HasWork</p>
+    <p>Subject: @student.Subject</p>
+    <p>Courses: @string.Join(", ", student.Courses)</p>
+</div>
+@code {
+    Student student = new();
+    List<string> subjects = ["Math", "Programming"];
+    List<string> courses = ["C#", "JavaScript", "HTML", "CSS"];
+}
+*@
+
+@* Пример 2. Компонент EditForm с атрибутом Model="@person" 
+
+<EditForm Model="@person" OnSubmit="Submit">
+    <p>
+        Name:<br />
+        <InputText id="name" @bind-Value="person.Name" />
+    </p>
+    <p>
+        Age:<br />
+        <InputNumber id="age" @bind-Value="person.Age" />
+    </p>
+    <button type="submit">Submit</button>
+</EditForm>
+<h3>@message</h3>
+
+@code {
+    Person person = new() { Name="Сергей", Age=45 };
+    string message = "";
+
+    void Submit()
+    {
+        message = $"Name: {person.Name} Age: {person.Age}";
+    }
+}
+*@
+
+@* Пример 3. Компонент EditForm с атрибутом EditContext="editContext" 
+
+<EditForm EditContext="editContext" OnSubmit="Submit">
+    <p>
+        Name:<br />
+        <InputText id="name" @bind-Value="person.Name" />
+    </p>
+    <p>
+        Age:<br />
+        <InputNumber id="age" @bind-Value="person.Age" />
+    </p>
+    <button type="submit">Submit</button>
+</EditForm>
+<h3>@message</h3>
+
+@code {
+    string message = "";
+    Person person = new() { Name = "Анна", Age = 27 };
+    EditContext? editContext;
+
+    protected override void OnInitialized()
+    {
+        editContext = new(person);
+    }
+
+    void Submit()
+    {
+        message = $"Name: {person.Name} Age: {person.Age}";
+    }
+}
+*@
+
+@* Пример 4. Валидация на основе аннотаций данных *@
+@* Пример 5. Валидация на основе аннотаций данных. Использование ErrorMessage. ValidationSummary *@
+@* Пример 11. Кастомная валидация *@
+
+<EditForm Model="@person" OnSubmit="Submit">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+    <p>
+        Name:<br />
+        <InputText id="name" @bind-Value="person.Name" />
+    </p>
+    <p>
+        Age:<br />
+        <InputNumber id="age" @bind-Value="person.Age" />
+    </p>
+    <button type="submit">Submit</button>
+</EditForm>
+<h3>@message</h3>
+
+@code {
+    string message = "";
+    Person person = new();
+    void Submit()
+    {
+        message = $"Name: {person.Name};   Age: {person.Age}";
+    }
+}
+
+
+@* Пример 6. Валидация на основе аннотаций данных. Использование ErrorMessage. ValidationMessage для каждого поля ввода 
+
+<EditForm Model="@person" OnSubmit="Submit">
+    <DataAnnotationsValidator />
+    
+    <p>
+        Name:<br />
+        <InputText id="name" @bind-Value="person.Name" /><br />
+        <ValidationMessage For="@(() => person.Name)" />
+    </p>
+    <p>
+        Age:<br />
+        <InputNumber id="age" @bind-Value="person.Age" /><br />
+        <ValidationMessage For="@(() => person.Age)" />
+    </p>
+    <button type="submit">Submit</button>
+</EditForm>
+
+@code {
+    Person person = new();
+    void Submit()
+    {
+        Console.WriteLine($"Name: {person.Name} \tAge: {person.Age}");
+    }
+}
+*@
+
+@* Пример 7. Стилизация сообщений об ошибках в полях ввода 
+<EditForm Model="@person" OnSubmit="Submit">
+    <DataAnnotationsValidator />
+    <ValidationSummary/>
+
+    <style>
+        .validation-errors {
+            color: red;
+        }
+        div.validation-message{
+            color: #2980B9;
+        }
+    </style>
+    <p>
+        Name:<br />
+        <InputText id="name" @bind-Value="person.Name" /><br />
+        <ValidationMessage For="@(() => person.Name)" />
+    </p>
+    <p>
+        Age:<br />
+        <InputNumber id="age" @bind-Value="person.Age" /><br />
+        <ValidationMessage For="@(() => person.Age)" />
+    </p>
+    <button type="submit">Submit</button>
+</EditForm>
+
+@code {
+    Person person = new();
+    void Submit()
+    {
+        Console.WriteLine($"Name: {person.Name} \tAge: {person.Age}");
+    }
+}
+*@
+
+@* Пример 8. Программная валидация 
+
+<EditForm EditContext="editContext" OnSubmit="Submit">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+    <p>
+        Name:<br />
+        <InputText id="name" @bind-Value="person.Name" />
+    </p>
+    <p>
+        Age:<br />
+        <InputNumber id="age" @bind-Value="person.Age" />
+    </p>
+    <button type="submit">Submit</button>
+</EditForm>
+<h3>@message</h3>
+
+@code {
+    string message = "";
+    Person person = new();
+    EditContext? editContext;
+
+    protected override void OnInitialized()
+    {
+        editContext = new(person);
+    }
+
+    void Submit()
+    {
+        if (editContext != null && editContext.Validate())
+            message = $"Name: {person.Name}; Age: {person.Age}";
+        else
+            message = "Data Invalid";
+    }
+}
+*@
+
+@* Пример 9. Программная валидация 2. OnValidSubmit и OnInvalidSubmit  
+
+<EditForm EditContext="editContext" OnValidSubmit="ValidSubmit" OnInvalidSubmit="InvalidSubmit">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+    <p>
+        Name:<br />
+        <InputText id="name" @bind-Value="person.Name" />
+    </p>
+    <p>
+        Age:<br />
+        <InputNumber id="age" @bind-Value="person.Age" />
+    </p>
+    <button type="submit">Submit</button>
+</EditForm>
+<h3>@message</h3>
+
+@code {
+    string message = "";
+    Person person = new();
+    EditContext? editContext;
+
+    protected override void OnInitialized()
+    {
+        editContext = new(person);
+    }
+
+    void ValidSubmit()
+    {
+        message = $"Name: {person.Name}; Age: {person.Age}";
+    }
+
+    void InvalidSubmit()
+    {
+        message = "Data Invalid";
+    }
+}
+*@
+
+@* Пример 10. Отслеживание изменения состояния валидации 
+
+@implements IDisposable
+
+<EditForm EditContext="editContext" OnSubmit="Submit">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+    <p>
+        Name:<br />
+        <InputText id="name" @bind-Value="person.Name" />
+    </p>
+    <p>
+        Age:<br />
+        <InputNumber id="age" @bind-Value="person.Age" />
+    </p>
+    <button type="submit">Submit</button>
+</EditForm>
+<h3>@message</h3>
+
+@code {
+    string message = "";
+    Person person = new();
+    EditContext? editContext;
+    ValidationMessageStore? messageStore;   // хранилище сообщений об ошибках
+
+    protected override void OnInitialized()
+    {
+        editContext = new(person);
+        messageStore = new(editContext);    // связываем хранилище сообщений с контекстом EditContext
+        editContext.OnValidationStateChanged += HandleValidationRequested;
+    }
+    void HandleValidationRequested(object? sender, ValidationStateChangedEventArgs args)
+    {
+        messageStore?.Clear();  // удаляем ранее добавленные сообщения
+                                // если имя - admin, добавляем сообщение обошибке
+        if (person.Name == "admin")
+            messageStore?.Add(() => person.Name!, "Invalid name");
+    }
+    public void Dispose()
+    {
+        if (editContext != null)
+            editContext.OnValidationStateChanged -= HandleValidationRequested;
+    }
+    void Submit()
+    {
+        if (editContext != null && editContext.Validate())
+            message = $"Name: {person.Name}; Age: {person.Age}";
+        else
+            message = "Data Invalid";
+    }
+}
+*@
