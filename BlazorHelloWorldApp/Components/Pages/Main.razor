@@ -1,0 +1,82 @@
+@rendermode RenderMode.InteractiveServer
+
+@* Пример 0. Передаваемый параметр
+<h1>@Title</h1>
+
+@code {
+    [Parameter]
+    public string Title { get; set; } = "";
+} 
+*@
+
+@* Пример 6. Двусторонняя привязка параметров 
+
+<input value="@search" @onchange="ChangeValue" />
+
+@code {
+    string? search = "";
+    [Parameter]
+    public string? Search
+    {
+        get { return search; }
+        set { search = value; }
+    }
+
+    [Parameter]
+    public EventCallback<string> SearchChanged { get; set; }
+
+    async Task ChangeValue(ChangeEventArgs e)
+    {
+        search = e?.Value?.ToString();
+        await SearchChanged.InvokeAsync(search);
+    }
+}
+*@
+
+@* Пример 7. Каскадная передача значений *@
+@* Пример 8. Каскадная передача значений с механизмом привязки к параметрам 
+
+<h2 style="color:@Color;">Date: @DateTime?.ToShortDateString()</h2>
+<Time />
+
+@code {
+
+    [CascadingParameter(Name = "Now")]
+    DateTime? DateTime { get; set; }
+    [CascadingParameter(Name = "Color")]
+    string? Color { get; set; }
+}
+*@
+
+@* Пример 9. Метод ЖЦ OnInitalized() 
+
+<h2>@message</h2>
+
+@code {
+    string message = "";
+    protected override void OnInitialized()
+    {
+       message = $"Main initialized at {DateTime.Now.ToLongTimeString()}";
+    }
+}
+*@
+
+@* Пример 10. Метод ЖЦ OnParametersSet() 
+
+@using System.Text.RegularExpressions
+
+<h3>@message</h3>
+
+@code {
+    string message = "";
+    [Parameter]
+    public string Phone { get; set; } = "";
+    protected override void OnParametersSet()
+    {
+        if (Regex.IsMatch(Phone, "^\\d{10}$"))
+            message = $"Phone: +{Phone}";
+        else
+            message = "Invalid Phone Number";
+    }
+}
+*@

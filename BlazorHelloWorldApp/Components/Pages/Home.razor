@@ -1,0 +1,313 @@
+﻿@page "/"
+@rendermode RenderMode.InteractiveServer
+
+
+<PageTitle>Home</PageTitle>
+
+@* Пример 1. Связывание переменной
+
+<h1>Hello, world!</h1>
+
+Welcome to your new app.
+Insert your name
+
+<input @bind-value="@name"/>
+<h2>Hello, @name</h2> 
+
+@code{
+    string name = "friend";
+}
+*@
+
+@* "под капотом" в input указывается как-бы:
+@onchange="@((ChangeEventArgs e) => item = e.Value.ToString())", но только, если 
+подключена интерактивность при рендеринге (строка 2) *@
+
+
+@* 
+
+Пример 2. Связывание переменной для стиля элемента div, изменения происходят сразу 
+т.к. используется выражение     @bind-value:event="oninput"
+
+<p>
+    <input @bind-value="divStyle" @bind-value:event="oninput" style="width:300px;" />
+</p>
+<div style="@divStyle"></div>
+
+@code {
+    string divStyle = "background-color:blue;width:100px;height:100px;";
+}
+*@
+
+@* Пример 3. Связывание содержимого ввода с действием после ввода. Поиск слов в словаре 
+
+<input @bind="searchText" @bind:after="PerformSearch" />
+<ul>
+    @foreach (var item in found)
+    {
+        <li>@item</li>
+    }
+</ul>
+
+@code {
+    // условная база данных
+    List<string> items = ["mo", "mom", "common", "cowboy", "boy"];
+    // найденные данные
+    List<string> found = [];
+    // ключ поиска
+    string searchText = "";
+    async Task PerformSearch()
+    {
+        // для имитации долгой работы
+        await Task.Delay(100);
+        found = items.Where(item => item.Contains(searchText)).ToList();
+        if (found.Count == 0) {
+            found = new List<string>() { "its", "nothing", "here" };
+        }
+        Console.WriteLine(found.Count);
+    }
+}
+*@
+
+@* Пример 4. Двустороннее связывание 
+
+<input type="number" @bind:get="age" @bind:set="SetAge" />
+<h2>Age: @age</h2>
+
+@code {
+    int age = 18;
+    void SetAge(int value)
+    {
+        if (value > 0 && value < 110) age = value;
+    }
+}
+*@
+
+@* Пример 5. Двустороннее связывание с "реактивными" изменениями 
+
+<Main Title="@title" />
+<input @bind="@title" @bind:event="oninput"/>
+
+@code {
+    string title = "Hello";
+}
+*@
+
+@* по умолчанию установлено событие "onchange",
+    если мы хотим "реактивных" (т.е. мгновенных) изменений, то нужно связывать событие "oninput"
+*@
+
+@* Пример 6. Двусторонняя привязка параметров 
+
+<Main @bind-Search="text" />
+
+<p><button @onclick="Clear">Clear</button></p>
+<ul>
+    @foreach (var item in Found)
+    {
+        <li>@item</li>
+    }
+</ul>
+
+@code {
+    string text = "C";    // искомое слово
+                          // условная база данных
+    List<string> database = ["C#", "C++", "JavaScript", "Java", "Python"];
+    // найденные элементы
+    List<string> Found
+    {
+        get { return database.Where(name => name.Contains(text)).ToList(); }
+    }
+    // очищаем поиск
+    void Clear() => text = "";
+}
+*@
+
+@* Пример 7. Каскадная передача значений 
+
+<CascadingValue Value="@now" Name="Now">
+    <CascadingValue Value="@color" Name="Color">
+        <Main />
+    </CascadingValue>
+</CascadingValue>
+
+@code {
+    DateTime now = DateTime.Now;
+    string color = "navy";
+}
+*@
+
+@* Пример 8. Каскадная передача значений с механизмом привязки к параметрам 
+
+<CascadingValue Value="@now" Name="Now">
+    <CascadingValue Value="@color" Name="Color">
+        <Main />
+    </CascadingValue>
+</CascadingValue>
+<input @bind="@color" />
+
+
+@code {
+    DateTime now = DateTime.Now;
+    string color = "navy";
+}
+*@
+
+@* Пример 9. Метод ЖЦ OnInitalized() 
+
+<h1>@message</h1>
+<Main />
+
+@code {
+    string message = "";
+    protected override void OnInitialized()
+    {
+        message = $"Home initialized at {DateTime.Now.ToLongTimeString()}";
+    }
+}
+*@
+
+@* Пример 10. Метод ЖЦ OnParametersSet() 
+
+<p><input @bind="@phone" /></p>
+<Main Phone="@phone" />
+
+@code {
+    string phone = "";
+}
+*@
+
+@* Пример 11. Метод ЖЦ OnAfterRender() 
+
+<h2>@message</h2>
+<input @bind="@message" />
+<ul>
+    @foreach (var renderTime in renderTimes)
+    {
+        <li>@renderTime</li>
+    }
+</ul>
+М
+@code {
+    string message = "";
+    List<string> renderTimes = [];
+    protected override void OnAfterRender(bool firstRender)
+    {
+        if (firstRender)
+            renderTimes.Add($"First render time: {DateTime.Now.ToLongTimeString()}");
+        else
+            renderTimes.Add($"Rerender time: {DateTime.Now.ToLongTimeString()}");
+    }
+}
+*@
+
+@* Пример 12. Внедрение зависимостей 
+
+    @inject ITimeService Timer
+
+    <h2>Time: @Timer.GetTime()</h2>
+*@
+
+@* Пример 12. Внедрение зависимостей, 2-ой вариант 
+
+<h2>Time: @Timer.GetTime()</h2>
+
+@code {
+
+    [Inject]
+    public required ITimeService Timer { get; set; }
+}
+*@
+
+@* Пример 13. Привязка моделей 
+
+<h2>Person</h2>
+<div>
+    <p>
+        Name:<br />
+        <input @bind="person.Name" @bind:event="oninput" />
+    </p>
+    <p>
+        Age:<br />
+        <input type="number" @bind="person.Age" @bind:event="oninput" />
+    </p>
+    <button @onclick="Submit">Send</button>
+</div>
+<div>
+    <p>Name: @person.Name</p>
+    <p>Age: @person.Age</p>
+</div>
+
+@code {
+    Person person = new();
+
+    void Submit()
+    {
+        Console.WriteLine($"{person.Name} - {person.Age}");
+    }
+}
+*@
+
+@* Пример 14. Привязка моделей 2 *@
+
+<h2>Person:</h2>
+<div>
+    <p>
+        Name:<br />
+        <input @bind="person.Name" @bind:event="oninput" />
+    </p>
+    <p>
+        Age:<br />
+        <input type="number" @bind="person.Age" @bind:event="oninput" />
+    </p>
+    <p>
+        Date:<br />
+        <input type="date" @bind="person.Day" />
+    </p>
+    <p>
+        IsWorking:<br />
+        <input type="checkbox" @bind="person.IsWorking" />
+    </p>
+    <p>
+        Subject:<br />
+        <input type="radio" name="subject" @onchange='@(()=>person.Subject = "Math")' />Math <br />
+        <input type="radio" name="subject" @onchange='@(()=>person.Subject = "Programming")' />Programming
+    </p>
+    <p>
+        Courses:<br />
+        <select multiple @bind="person.Courses">
+            <option value="C#">C#</option>
+            <option value="JavaScript">JavaScript</option>
+            <option value="C++">C++</option>
+        </select>
+    </p>
+</div>
+<hr />
+<div>
+    <p>Name: @person.Name</p>
+    <p>Age: @person.Age</p>
+    <p>Day: @person.Day.ToShortDateString()</p>
+    <p>IsWorking: @person.IsWorking</p>
+    <p>Subject: @person.Subject</p>
+    <p>Courses: @string.Join(", ", person.Courses)</p>
+</div>
+
+@code {
+    Person person = new();
+}
+
+
+@* Пример 15. Управление head и его элементами (метаданные, css-свойства и т.д.) 
+
+<PageTitle>METANIT.COM</PageTitle>
+<HeadContent>
+    <meta name="description" content="Как устанавливать заголовок страницы в Blazor" />
+    <meta name="updated_at" content="@DateTime.Now" />
+</HeadContent>
+
+<h2>Hello METANIT.COM</h2>
+
+<h4>There are the meta data here</h4>
+<p>Look at &lt;head/&gt; and &lt;meta/&gt;</p>
+
+*@

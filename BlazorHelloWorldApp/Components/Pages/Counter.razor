@@ -1,0 +1,64 @@
+﻿@page "/counter"
+@rendermode InteractiveServer
+
+<PageTitle>Counter</PageTitle>
+
+<h1>Blazor Counter</h1>
+
+<p role="status">Current count: @currentCount</p>
+
+<button class="btn btn-primary wide100" @onclick="IncrementCount">+</button>
+<button class="btn btn-danger wide200" @onclick="DecrementCount">-</button>
+
+<style>
+    #canvas {
+        margin: 20px;
+        width: 200px;
+        height: 200px;
+        background-color: #ccc;
+    }
+    .wide100{
+        width: 100px;
+    }
+    .wide200{
+        width: 200px;
+    }
+</style>
+
+<h1>Blazor Find Coordinates</h1>
+
+<div id="canvas" @onclick="Click"></div>
+<div>
+    <p>ClientX: @clientX , ClientY: @clientY</p>
+    <p>OffsetX: @offsetX , OffsetY: @offsetY</p>
+    <p>PageX: @pageX , PageY: @pageY</p>
+    <p>ScreenX: @screenX , ScreenY: @screenY</p>
+</div>
+
+@code {
+    private int currentCount = 0;
+
+    private void IncrementCount()
+    {
+        currentCount++;
+    }
+
+    void DecrementCount()
+    {
+        if (currentCount > 0) currentCount--;
+    }
+
+    double clientX, clientY, offsetX, offsetY, pageX, pageY, screenX, screenY;
+
+    void Click(MouseEventArgs e)
+    {
+        clientX = e.ClientX;
+        clientY = e.ClientY;
+        offsetX = e.OffsetX;
+        offsetY = e.OffsetY;
+        pageX = e.PageX;
+        pageY = e.PageY;
+        screenX = e.ScreenX;
+        screenY = e.ScreenY;
+    }
+}
