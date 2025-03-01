@@ -1,0 +1,60 @@
+﻿@inherits LayoutComponentBase
+
+@* Сгенерированный скрипт компонента компоновки по умолчанию  
+<div class="page">
+    <div class="sidebar">
+        <NavMenu />
+    </div>
+
+    <main>
+        <div class="top-row px-4">
+            <a href="https://learn.microsoft.com/aspnet/core/" target="_blank">About</a>
+        </div>
+
+        <article class="content px-4">
+            @Body
+        </article>
+    </main>
+</div>
+
+<div id="blazor-error-ui" data-nosnippet>
+    An unhandled error has occurred.
+    <a href="." class="reload">Reload</a>
+    <span class="dismiss">🗙</span>
+</div>
+*@
+
+@* Пример 4. Используем компонент компоновки 
+<div>
+    <div>
+        <a href="/">Home</a> | <a href="contacts">Contacts</a> | <a href="about">About</a>
+    </div>
+
+    <div>
+        @Body
+    </div>
+</div>
+*@
+
+@* Пример 7. Используем NavLink (вместо тега ссылки - а) *@
+@using Microsoft.AspNetCore.Components.Routing  @*для NavLink*@
+<style>
+    a {
+        color: #00897B;
+    }
+    a.active {
+        color: #004D40;
+        font-weight: 700;
+    }
+</style>
+<div>
+    <div>
+        <NavLink href="/" Match="NavLinkMatch.All">Home</NavLink> | 
+        <NavLink href="contacts">Contacts</NavLink> | 
+        <NavLink href="about">About</NavLink>
+    </div>
+    <div>
+        @Body 
+    </div>
+</div>
+@* Н.использовать атрибут Match="NavLinkMatch.All", чтобы для пути "/" не указывалось активное состояние, когда оно не выбирается *@

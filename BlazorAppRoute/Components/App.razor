@@ -1,0 +1,66 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <base href="/" />
+    <link rel="stylesheet" href="@Assets["lib/bootstrap/dist/css/bootstrap.min.css"]" />
+    <link rel="stylesheet" href="@Assets["app.css"]" />
+    <link rel="stylesheet" href="@Assets["BlazorAppRoute.styles.css"]" />
+    <ImportMap />
+    <link rel="icon" type="image/png" href="favicon.png" />
+    <HeadOutlet />
+</head>
+
+<body>
+    
+    @* <Routes/> *@
+
+    @* Пример 1. Компонент Router 
+    <Router AppAssembly="@typeof(Program).Assembly">
+        <Found>
+            <p>Page Found</p>
+        </Found>
+    </Router>
+    *@
+
+    @* Пример 2. Компонент RouteView *@
+    @* Пример 4. Используем компонент компоновки *@
+    @* Пример 5. Используем альтернативную компоновку для отдельных компонентов (см. Contracts.razor) *@
+    @* Пример 6. Другой способ установить альтернативную компоновку для отдельных компонентов (см. SecondLayout) *@
+    @* Пример 7. Используем NavLink (вместо тега ссылки - а) (см. MainLayout) *@
+
+    @* Основная разметка *@
+    
+    <Router AppAssembly="@typeof(Program).Assembly">
+        <Found Context="routeData">
+            <RouteView RouteData="routeData" DefaultLayout="typeof(Layout.MainLayout)" />
+            <FocusOnNavigate RouteData="routeData" Selector="h1" />
+        </Found>
+    </Router> 
+
+    @* Тут используется компонент компоновки - MainLayout.razor 
+        В Примере 4. создаем свою собственную компоновку
+    *@
+
+    @* Пример 8. Параметры маршрутов (см. User.razor) *@
+    @* Пример 9. Параметры маршрутов 2 (см. User.razor) *@
+    @* Пример 10. Параметры строки запроса (см. User.razor) 
+
+    <Router AppAssembly="@typeof(Program).Assembly">
+        <Found Context="routeData">
+            <RouteView RouteData="routeData" />
+        </Found>
+    </Router>
+    *@
+
+    @* Пример 11. Управление навигацией и NavigationManager (см. About.razor) *@
+    @* Пример 12. Программная навигация (см. Home.razor) *@
+
+
+
+    <script src="_framework/blazor.web.js"></script>
+</body>
+
+</html>

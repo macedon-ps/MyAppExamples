@@ -1,0 +1,55 @@
+﻿@page "/"
+@page "/home"
+
+<PageTitle>Home</PageTitle>
+
+<h1>Home Page</h1>
+
+@* Пример 12. Программная навигация 
+
+@using Microsoft.AspNetCore.Components.Web
+@rendermode RenderMode.InteractiveServer
+@inject NavigationManager Navigation
+
+<button @onclick="GoToAbout">To About Page</button>
+
+@code {
+    void GoToAbout()
+    {
+        Navigation.NavigateTo("about");
+    }
+}
+*@
+
+@* Пример 13. Отслеживание изменения пути *@
+
+@using Microsoft.AspNetCore.Components.Routing
+@using Microsoft.AspNetCore.Components.Web
+@rendermode RenderMode.InteractiveServer
+@inject NavigationManager Navigation
+@implements IDisposable
+ 
+<p><a href="/about">About</a></p>
+<button @onclick="GoToAbout">To About Page</button>
+ 
+@code{
+    void GoToAbout()
+    {
+        Navigation.NavigateTo("/about");
+    }
+ 
+    protected override void OnInitialized()
+    {
+        Navigation.LocationChanged += HandleLocationChanged;
+    }
+ 
+    private void HandleLocationChanged(object? sender, LocationChangedEventArgs e)
+    {
+        Console.WriteLine($"URL of new location: {e.Location}");
+    }
+ 
+    public void Dispose()
+    {
+        Navigation.LocationChanged -= HandleLocationChanged;
+    }
+}

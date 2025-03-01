@@ -1,0 +1,13 @@
+﻿@page "/about"
+
+<h1>About Page</h1> 
+
+@* Пример 11. Управление навигацией и NavigationManager 
+
+@inject NavigationManager Navigation
+
+<br /><hr />
+<h3>URI: @Navigation.Uri</h3>
+<h3>Absolute: @Navigation.ToAbsoluteUri(Navigation.Uri)</h3>
+<h3>Relative: @Navigation.ToBaseRelativePath(Navigation.Uri)</h3>
+*@

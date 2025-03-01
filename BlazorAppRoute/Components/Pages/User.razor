@@ -1,0 +1,81 @@
+﻿@* Пример 8. Параметры маршрутов 
+
+@page "/user/{name}/{age:int?}"
+
+<h2>Hello, @Name</h2>
+
+@if (Age == 0)
+{
+    return;
+}
+
+@if (Age > 0 && Age < 14)
+{
+    <h3>You are a kid</h3>
+    <h3>Your age: @Age</h3>
+}
+
+@if (Age >= 14 && Age < 80)
+{
+    <h3>You are a man</h3>
+    <h3>Your age: @Age</h3>
+}
+
+@if (Age >= 80 && Age < 100)
+{
+    <h3>You are a old man</h3>
+    <h3>Your age: @Age</h3>
+}
+
+@if (Age >= 100)
+{
+    <h3>Have you lived yet ?</h3>
+    <h3>Your age: @Age</h3>
+}
+
+@code {
+    [Parameter]
+    public string Name { get; set; } = "";
+
+    [Parameter]
+    public int Age { get; set; }
+}
+*@
+
+@* Тут используются 2 параметра: name и age. 
+    Для age указано ограничение, что это число. М.б. не задано. Для разных значений age возможен условный рендеринг *@
+
+@* Пример 9. Параметры маршрутов 2 
+
+@page "/user/{*info}"
+
+<div>@Info</div>
+
+@code {
+    [Parameter]
+    public string? Info { get; set; }
+}
+*@
+
+@* Тут используется параметр catch-all или общий параметр - *info. В него можно вставить произвольное количество отдельных параметров в виде одного. 
+  Например, *info = "Bob/42" или "Sam/London/UK/142_disr/77" *@
+
+@* Пример 10. Параметры строки запроса (см. User.razor) *@
+
+@page "/user"
+
+<h2>Hello @Name</h2>
+
+@if (Age != null)
+{
+    <h3>Your age: @Age</h3>
+}
+
+@code {
+    [Parameter]
+    [SupplyParameterFromQuery]
+    public string? Name { get; set; }
+    [Parameter]
+    [SupplyParameterFromQuery]
+    public int? Age { get; set; }
+}
