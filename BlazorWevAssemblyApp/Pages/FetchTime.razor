@@ -1,0 +1,17 @@
+﻿@page "/time"
+@inject HttpClient Http
+
+<h3>Current Time</h3>
+
+<p>@time</p>
+
+<button @onclick="GetTime">Get Current Time</button>
+
+@code {
+    private string time;
+
+    private async Task GetTime()
+    {
+        time = await Http.GetStringAsync("api/time");
+    }
+}
