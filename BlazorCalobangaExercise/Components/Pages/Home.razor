@@ -1,7 +1,39 @@
 ﻿@page "/"
+@rendermode InteractiveServer
 
 <PageTitle>Home</PageTitle>
 
-<h1>Hello, world!</h1>
+<h1>User data</h1>
+<h2 class="status @CssStatus.ToString()">Hello, @name @surname !</h2>
 
-Welcome to your new app.
+<h3>Enter your name and surname</h3>
+
+<input type="text" placeholder="Insert your name" @bind-value="@name"/>
+<input type="text" placeholder="Insert your surname" @bind-value="@surname"/>
+
+<select onchange=@SelectStatus>
+    @foreach (var item in Enum.GetNames<Status>())
+    {
+        <option value="@item">@item</option>
+    }
+</select>
+
+@code{
+    string name = "John";
+    string surname = "Doe";
+
+    Status CssStatus = new Status();
+
+    public enum Status
+    {
+        disconnected, 
+        connected, 
+        connecting
+    }
+
+    private void SelectStatus(ChangeEventArgs args)
+    {
+        var value = args.Value?.ToString();
+        CssStatus = Enum.Parse<Status>(value ?? "disconnected");
+    }
+}

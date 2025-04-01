@@ -1,0 +1,17 @@
+﻿body {
+}
+.status{
+
+}
+.disconnected {
+    background-color: grey;
+    color: white;
+}
+.connected {
+    background-color: darkblue;
+    color: white;
+}
+.connecting {
+    background-color: blue;
+    color: white;
+}
