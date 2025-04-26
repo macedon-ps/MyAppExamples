@@ -56,7 +56,7 @@ Console.WriteLine(company.Equals(company2));                        // срав�
 Console.WriteLine("company.GetType().Equals(company2.GetType()) :");
 Console.WriteLine(company.GetType().Equals(company2.GetType()));    // сравнение типов двух объектов
 // var isEquals = person3.Equals(person4);                          // NullReferenceException
-// Console.WriteLine(isEquals);                                     // ошибка сравнения двух null
+// Console.WriteLine(isEquals);                                     // person3 не может быть null
 Console.WriteLine("Equals(person3,person4), person3=null, person4=null :");
 Console.WriteLine(Equals(person3,person4));                         // сравнение двух null
 Console.WriteLine("ReferenceEquals(person,person2), person!=person2, person!=null, person2!=null :");
