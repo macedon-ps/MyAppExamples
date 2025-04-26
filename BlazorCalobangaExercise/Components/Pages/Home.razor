@@ -1,4 +1,5 @@
 ﻿@page "/"
+@using BlazorCalobangaExercise.Infrastructure
 @rendermode InteractiveServer
 
 <PageTitle>Home</PageTitle>
@@ -23,13 +24,6 @@
     string surname = "Doe";
 
     Status CssStatus = new Status();
-
-    public enum Status
-    {
-        disconnected, 
-        connected, 
-        connecting
-    }
 
     private void SelectStatus(ChangeEventArgs args)
     {

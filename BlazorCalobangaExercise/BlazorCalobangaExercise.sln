@@ -1,9 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.13.35825.156 d17.13
+VisualStudioVersion = 17.13.35825.156
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlazorCalobangaExercise", "BlazorCalobangaExercise.csproj", "{947ABE25-4BC4-4321-A9BC-7C147170F518}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlazorCalabongaAppAsseblyWithParameters", "..\BlazorCalabongaAppAsseblyWithParameters\BlazorCalabongaAppAsseblyWithParameters.csproj", "{A1747212-6544-4C2D-BC6D-67077593B38D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{947ABE25-4BC4-4321-A9BC-7C147170F518}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{947ABE25-4BC4-4321-A9BC-7C147170F518}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{947ABE25-4BC4-4321-A9BC-7C147170F518}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A1747212-6544-4C2D-BC6D-67077593B38D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A1747212-6544-4C2D-BC6D-67077593B38D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A1747212-6544-4C2D-BC6D-67077593B38D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A1747212-6544-4C2D-BC6D-67077593B38D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
