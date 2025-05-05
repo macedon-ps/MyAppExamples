@@ -1,4 +1,6 @@
-﻿// данные
+﻿/* Пример 1. Проверка методов класса Object */
+
+/* Данные
 int i = 5;
 var f = 77.99;
 
@@ -11,11 +13,11 @@ person4 = null;
 
 var company = new Company() { CompanyName = "IBM", NumberEmployees = 1000, LevelOfProductivityInPercent = 77.89 };
 var company2 = new Company() { CompanyName = "Apple", NumberEmployees = 1300, LevelOfProductivityInPercent = 83.46 };
+*/
 
-// 1. Проверка методов
-//1.1.method ToString()
-/* 
- * Console.WriteLine(i.ToString()); // выведет число 5
+/*1.1.method ToString()
+ 
+Console.WriteLine(i.ToString()); // выведет число 5
 Console.WriteLine(f.ToString()); // выведет число 3,5
 
 Console.WriteLine(person.ToString());
@@ -27,8 +29,8 @@ Console.WriteLine(company.ToString());
 Console.WriteLine(company2);    // метод ToString() вызывается неявно
 */
 
-// 1.2. method GetHashCode()
-/*
+/* 1.2. method GetHashCode()
+
 Console.WriteLine($"Хеш-код person1: {person.GetHashCode()}");
 Console.WriteLine($"Хеш-код person1 повтор: {person.GetHashCode()}");
 Console.WriteLine($"Хеш-код person2: {person2.GetHashCode()}");
@@ -37,8 +39,8 @@ Console.WriteLine($"Хеш-код company1: {company.GetHashCode()}");
 Console.WriteLine($"Хеш-код company2: {company2.GetHashCode()}");
 */
 
-// 1.3.method GetType()
-/*
+/* 1.3.method GetType()
+
 Console.WriteLine(person.GetType());
 Console.WriteLine(person.Surname.GetType());
 Console.WriteLine(company.GetType());
@@ -50,7 +52,7 @@ if (company2.GetType() == typeof(Company))
     Console.WriteLine("А это таки структура Company");
 */
 
-// 1.4. method Equals()
+/* 1.4. method Equals()
 Console.WriteLine("company.Equals(company2) :");
 Console.WriteLine(company.Equals(company2));                        // сравнение двух объектов
 Console.WriteLine("company.GetType().Equals(company2.GetType()) :");
@@ -63,9 +65,9 @@ Console.WriteLine("ReferenceEquals(person,person2), person!=person2, person!=nul
 Console.WriteLine(ReferenceEquals(person, person2));                // сравнение двух null
 Console.WriteLine("ReferenceEquals(person3,person4), person3=null, person4=null :");
 Console.WriteLine(ReferenceEquals(person3,person4));                // сравнение двух null
+*/
 
-
-
+/* Пользовательские классы
 public class Person
 {
     public string Name { get; set; }
@@ -89,3 +91,4 @@ public struct Company
         return $"В компании {CompanyName} сегодня работают {NumberEmployees} работников. Средння продуктивность труда работников составляет {LevelOfProductivityInPercent} %";
     }
 }
+*/
