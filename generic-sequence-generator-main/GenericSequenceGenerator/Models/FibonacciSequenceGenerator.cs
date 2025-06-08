@@ -20,21 +20,10 @@ namespace GenericSequenceGenerator.Models
         public FibonacciSequenceGenerator(int previous, int current, int count = 20)
             : base(previous, current)
         {
-            this.FibonacciSequance = new List<int>(count) { previous, current };
             this.Count = count;
             this.tempPrev = previous;
             this.tempCurr = current;
-
-            for (int i = 1; i <= this.Count - 2; i++)
-            {
-                this.FibonacciSequance.Add(this.Next);
-            }
         }
-
-        /// <summary>
-        /// Последовательность элементов с числами Фибоначчи.
-        /// </summary>
-        public List<int> FibonacciSequance { get; set; }
 
         /// <summary>
         /// Метод вычисчисления следующего элемента последовательности GetNext().

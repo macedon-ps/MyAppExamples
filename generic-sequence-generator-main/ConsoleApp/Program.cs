@@ -1,26 +1,61 @@
 using GenericSequenceGenerator.Models;
 
 /* Пример 1. Проверка создания последовательности чисел Фибоначчи */
+// 1.1.
+var expectedArray = new int[] { 0, 1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89, 144, 233, 377, 610, 987, 1597, 2584, 4181 };
+var expectedCount = expectedArray.Length;
 
-var count = 7;
-var fibonacci = new FibonacciSequenceGenerator(3, 12);
-var fibonacciSequence = fibonacci.FibonacciSequance;
-Console.WriteLine($"prev = {fibonacci.Previous} curr = {fibonacci.Current} next = {fibonacci.Next} count = {fibonacci.Count}");
-var fibonacci2 = new FibonacciSequenceGenerator(2, 5, count);
-var fibonacciSequence2 = fibonacci2.FibonacciSequance;
-Console.WriteLine($"prev = {fibonacci2.Previous} curr = {fibonacci2.Current} next = {fibonacci2.Next} count = {fibonacci2.Count}");
-var i = 1;
-foreach (var item in fibonacciSequence)
+var fibonacci = new FibonacciSequenceGenerator(0, 1);
+var newFibonacci = new List<int>(fibonacci.Count) { fibonacci.Previous, fibonacci.Current };
+
+int i;
+for (i = 1; i <= fibonacci.Count - 2; i++)
+{
+    newFibonacci.Add(fibonacci.Next);
+}
+
+i = 1;
+foreach (var item in newFibonacci)
 {
     Console.WriteLine($"{i++}: {item}");
 }
 Console.WriteLine("----------");
 
+Console.WriteLine($"expectedArray is equal to newFibonacci: {expectedArray.SequenceEqual(newFibonacci)}");
+Console.WriteLine($"fibonacci.Count == expectedCount: {fibonacci.Count == expectedCount}");
+
+Console.WriteLine("----------");
+
+// 1.2.
+var expectedArray2 = new int[] { 3, 7, 10, 17, 27, 44, 71, 115, 186, 301, 487, 788, 1275 };
+var expectedCount2 = expectedArray2.Length;
+var count = 13;
+
+var fibonacci2 = new FibonacciSequenceGenerator(3, 7, count);
+var newFibonacci2 = new List<int>(fibonacci2.Count) { fibonacci2.Previous, fibonacci2.Current };
+
+for (i = 1; i <= fibonacci2.Count - 2; i++)
+{
+    newFibonacci2.Add(fibonacci2.Next);
+}
+
 i = 1;
-foreach (var item in fibonacciSequence2)
+foreach (var item in newFibonacci2)
 {
     Console.WriteLine($"{i++}: {item}");
 }
+Console.WriteLine("----------");
+
+Console.WriteLine($"expectedArray2 is equal to newFibonacci2: {expectedArray2.SequenceEqual(newFibonacci2)}");
+Console.WriteLine($"fibonacci2.Count == expectedCount2: {fibonacci2.Count == expectedCount2}");
+
+Console.ReadLine();
+
+//i = 1;
+//foreach (var item in fibonacciSequence2)
+//{
+//    Console.WriteLine($"{i++}: {item}");
+//}
 
 
 /* Пример 2. Проверка создания последовательности целых чисел 
