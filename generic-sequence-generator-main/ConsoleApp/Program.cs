@@ -50,7 +50,7 @@ Console.WriteLine($"expectedArray2 is equal to newFibonacci2: {expectedArray2.Se
 Console.WriteLine($"fibonacci2.Count == expectedCount2: {fibonacci2.Count == expectedCount2}");
 */
 
-/* Пример 2. Проверка создания последовательности целых чисел */
+/* Пример 2. Проверка создания последовательности целых чисел 
 
 var expectedArray = new int[] { 1, 2, 4, 8, 16, 32, 64, 128, 256, 512 };
 var expectedCount = expectedArray.Length;
@@ -100,28 +100,59 @@ Console.WriteLine($"expectedArray2 is equal to newIntegers2: {expectedArray2.Seq
 Console.WriteLine($"newIntegers2.Count == expectedCount2: {newIntegers2.Count == expectedCount2}");
 
 Console.WriteLine("----------");
+*/
 
+/* Пример 3. Проверка создания последовательности целых чисел */
 
-/* Пример 3. Проверка создания последовательности целых чисел 
+var expectedArray = new double[] { 1.1, 4.3, 4.5558139534883715, 5.499662855989648, 6.328043444542756, 7.197137170618942, 8.076381694452097, 8.967515551531049, 9.868142001303216, 10.77687594031086 };
+var expectedCount = expectedArray.Length;
 
-var count = 16;
-var doubles = new DoubleSequenceGenerator(1.1, 4.3).DoubleSequance;
+//var count = 16;
+var doubles = new DoubleSequenceGenerator(1.1, 4.3);
+var newDoubles = new List<double>(doubles.Count) { doubles.Previous, doubles.Current };
 
-var doubles2 = new DoubleSequenceGenerator(3, 7, count).DoubleSequance;
+int i;
+for (i = 1; i <= doubles.Count - 2; i++)
+{
+    newDoubles.Add(doubles.Next);
+}
 
-var i = 1;
-foreach (double item in doubles)
+i = 1;
+foreach (double item in newDoubles)
 {
     Console.WriteLine($"{i++}: {item}");
 }
 Console.WriteLine("----------");
 
+Console.WriteLine($"expectedArray is equal to newDoubles: {expectedArray.SequenceEqual(newDoubles)}");
+Console.WriteLine($"newDoubles.Count == expectedCount: {newDoubles.Count == expectedCount}");
+
+Console.WriteLine("----------");
+
+var expectedArray2 = new double[] { 3.3, 6.8, 7.285294117647059, 8.21868127953644, 9.105112310240429, 10.007757000333156, 10.917562495204516 };
+var expectedCount2 = expectedArray2.Length;
+var count = 7;
+
+var doubles2 = new DoubleSequenceGenerator(3.3, 6.8, count);
+var newDoubles2 = new List<double>(doubles2.Count) { doubles2.Previous, doubles2.Current };
+
 i = 1;
-foreach (double item in doubles2)
+for (i = 1; i <= doubles2.Count - 2; i++)
+{
+    newDoubles2.Add(doubles2.Next);
+}
+
+i = 1;
+foreach (double item in newDoubles2)
 {
     Console.WriteLine($"{i++}: {item}");
 }
-*/
+
+Console.WriteLine("----------");
+
+Console.WriteLine($"expectedArray2 is equal to newDoubles2: {expectedArray2.SequenceEqual(newDoubles2)}");
+Console.WriteLine($"newDoubles2.Count == expectedCount2: {newDoubles2.Count == expectedCount2}");
+
 
 /* Пример 4. Проверка создания последовательности символов 
 
