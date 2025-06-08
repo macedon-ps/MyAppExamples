@@ -1,6 +1,6 @@
 using GenericSequenceGenerator.Models;
 
-/* Пример 1. Проверка создания последовательности чисел Фибоначчи */
+/* Пример 1. Проверка создания последовательности чисел Фибоначчи 
 // 1.1.
 var expectedArray = new int[] { 0, 1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89, 144, 233, 377, 610, 987, 1597, 2584, 4181 };
 var expectedCount = expectedArray.Length;
@@ -48,11 +48,13 @@ Console.WriteLine("----------");
 
 Console.WriteLine($"expectedArray2 is equal to newFibonacci2: {expectedArray2.SequenceEqual(newFibonacci2)}");
 Console.WriteLine($"fibonacci2.Count == expectedCount2: {fibonacci2.Count == expectedCount2}");
+*/
 
+/* Пример 2. Проверка создания последовательности целых чисел */
 
-/* Пример 2. Проверка создания последовательности целых чисел 
+var expectedArray = new int[] { 1, 2, 4, 8, 16, 32, 64, 128, 256, 512 };
+var expectedCount = expectedArray.Length;
 
-var count = 13;
 var integers = new IntegerSequenceGenerator(1, 2);
 var newIntegers = new List<int>(integers.Count) { integers.Previous, integers.Current };
 
@@ -68,23 +70,36 @@ foreach (var item in newIntegers)
     Console.WriteLine($"{i++}: {item}");
 }
 Console.WriteLine("----------");
-*/
 
+Console.WriteLine($"expectedArray is equal to newIntegers: {expectedArray.SequenceEqual(newIntegers)}");
+Console.WriteLine($"newIntegers.Count == expectedCount: {newIntegers.Count == expectedCount}");
 
-//var integers2 = new IntegerSequenceGenerator(3, 7, count);
+Console.WriteLine("----------");
 
-//var i = 1;
-//foreach(int item in integers)
-//{
-//    Console.WriteLine($"{i++}: {item}");
-//}
-//Console.WriteLine("----------");
+var expectedArray2 = new int[] { 4, 11, 34, 116, 424, 1616, 6304, 24896 };
+var expectedCount2 = expectedArray2.Length;
+var count = 8;
 
-//i = 1;
-//foreach(int item in integers2)
-//{
-//    Console.WriteLine($"{i++}: {item}");
-//}
+var integers2 = new IntegerSequenceGenerator(4, 11, count);
+var newIntegers2 = new List<int>(integers2.Count) { integers2.Previous, integers2.Current };
+
+i = 1;
+for (i = 1; i <= integers2.Count - 2; i++)
+{
+    newIntegers2.Add(integers2.Next);
+}
+
+i = 1;
+foreach (var item in newIntegers2)
+{
+    Console.WriteLine($"{i++}: {item}");
+}
+Console.WriteLine("----------");
+
+Console.WriteLine($"expectedArray2 is equal to newIntegers2: {expectedArray2.SequenceEqual(newIntegers2)}");
+Console.WriteLine($"newIntegers2.Count == expectedCount2: {newIntegers2.Count == expectedCount2}");
+
+Console.WriteLine("----------");
 
 
 /* Пример 3. Проверка создания последовательности целых чисел 
