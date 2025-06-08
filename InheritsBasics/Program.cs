@@ -123,13 +123,17 @@ internal class Program
 }
 */
 
-/* Вопрос 7 */       // A B C
+/* Вопрос 7          // B A C B C C
 
-var c = new C();
-A a = c;
+A a = new B();
+B b = new C();
+C c = new C();
 
-a.Print2();         
-a.Print1();         
+a.Print1();
+a.Print2(); 
+b.Print1();
+b.Print2();    
+c.Print1();         
 c.Print2();         
 public class A
 {
@@ -148,11 +152,173 @@ public class B : A
     {
         Console.Write("B");
     }
+    new public void Print2()
+    {
+        Console.Write("B");
+    }
 }
 public class C : B
 {
+    public override void Print1()
+    {
+        Console.Write("C");
+    }
     new public void Print2()
     {
         Console.Write("C");
     }
+}
+*/
+
+/* Вопрос 8.         // error: Top-level statements must precede namespace and type declarations.
+
+static IEnumerable<int> Square(IEnumerable<int> a)
+{
+    foreach (var r in a)
+    {
+        Console.WriteLine(r * r);
+        yield return r * r;
+    }
+}
+class Wrap
+{
+    private static int init = 0;
+    public int Value
+    {
+        get { return ++init; }
+    }
+}
+var w = new Wrap();
+var wraps = new Wrap[3];
+for (int i = 0; i < wraps.Length; i++)
+{
+    wraps[i] = w;
+}
+
+var values = wraps.Select(x => x.Value);
+var results = Square(values);
+int sum = 0;
+int count = 0;
+foreach (var r in results)
+{
+    count++;
+    sum += r;
+}
+Console.WriteLine("Count {0}", count);
+Console.WriteLine("Sum {0}", sum);
+
+Console.WriteLine("Count {0}", results.Count());
+Console.WriteLine("Sum {0}", results.Sum());
+
+*/
+/* Вопрос 13         // test    
+
+object sync = new object();
+var thread = new Thread(() =>
+{
+    try
+    {
+        Work();
+    }
+    finally
+    {
+        lock (sync)
+        {
+            Monitor.PulseAll(sync);
+        }
+    }
+});
+thread.Start();
+lock (sync)
+{
+    Monitor.Wait(sync);
+}
+Console.WriteLine("test");
+
+static void Work()
+{
+    Thread.Sleep(1000);
+}
+*/
+
+/* Вопрос 14 
+
+try
+{
+    Calc();
+}
+catch (MyCustomException e)
+{
+    Console.WriteLine("Catch MyCustomException");
+    throw;
+}
+catch (DivideByZeroException e)
+{
+    Console.WriteLine("Catch Exception");
+}
+Console.ReadLine();
+
+
+static void Calc()
+{
+    int result = 0;
+    var x = 5;
+    int y = 0;
+    try
+    {
+        result = x / y;
+    }
+    catch (MyCustomException e)
+    {
+        Console.WriteLine("Catch DivideByZeroException");
+        throw;
+    }
+    catch (Exception e)
+    {
+        Console.WriteLine("Catch Exception");
+    }
+    finally
+    {
+        throw new MyCustomException();
+    }
+}
+class MyCustomException : DivideByZeroException
+{
+    
+}
+*/
+
+/* Teoretical tests 
+namespace MyNamespace
+{
+    internal class Class1 { }
+
+    static class Class2 { }
+
+    // private class Class3 { }         // error
+
+    abstract class Class4 { }
+
+    // protected class Class5 { }       // error
+}
+*/
+
+/* Practical tests */
+int a = 1;
+int b = 7;
+int c = 54;
+
+
+Console.WriteLine($"a + b = {Operations.Add(a,b)}");
+Console.WriteLine($"a - b = {Operations.Sub(a,b)}");
+Console.WriteLine($"a * b = {Operations.Mult(a,b)}");
+Console.WriteLine($"a + b + c = {Operations.Sum(a,b,c)}");
+
+public class Operations
+{
+    public static int Add(int a, int b) => a + b;
+    public static int Sub(int a, int b) => a - b;
+    public static int Mult(int a, int b) => a * b;
+    public static int Sum(int a, int b, int c) => a + b + c;
+    
 }
