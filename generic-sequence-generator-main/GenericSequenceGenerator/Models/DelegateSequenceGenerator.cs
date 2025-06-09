@@ -17,11 +17,6 @@ namespace GenericSequenceGenerator.Models
         }
 
         /// <summary>
-        /// последовательность элементов обобщенного типа Т.
-        /// </summary>
-        public List<T> DelegateSequance { get; set; }
-
-        /// <summary>
         /// Конструктор DelegateSequenceGenerator с параметрами.
         /// </summary>
         /// <param name="previous">Предыдущий элемент последовательности.</param>
@@ -31,14 +26,8 @@ namespace GenericSequenceGenerator.Models
         public DelegateSequenceGenerator(T previous, T current, Func<T, T, T> myFunc, int count = 10)
             : base(previous, current)
         {
-            this.DelegateSequance = new List<T>(count) { previous, current };
             this.Count = count;
             this.MyFunc = myFunc;
-
-            for (int i = 1; i <= this.Count - 2; i++)
-            {
-                this.DelegateSequance.Add(this.Next);
-            }
         }
 
         /// <summary>
@@ -80,7 +69,7 @@ namespace GenericSequenceGenerator.Models
 
         public override T GetNext()
         {
-            throw new NotImplementedException();
+            return this.GetNext(this.MyFunc);
         }
     }
 }
