@@ -10,13 +10,7 @@ namespace GenericSequenceGenerator.Models
         public CharSequenceGenerator(char previous, char current, int count = 10)
             : base(previous, current)
         {
-            this.CharSequance = new List<char>(count) { previous, current };
             this.Count = count;
-
-            for (int i = 1; i <= this.Count - 2; i++)
-            {
-                this.CharSequance.Add(this.Next);
-            }
         }
 
         /// <summary>

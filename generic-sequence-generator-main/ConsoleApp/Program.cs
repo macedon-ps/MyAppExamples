@@ -102,12 +102,11 @@ Console.WriteLine($"newIntegers2.Count == expectedCount2: {newIntegers2.Count ==
 Console.WriteLine("----------");
 */
 
-/* Пример 3. Проверка создания последовательности целых чисел */
+/* Пример 3. Проверка создания последовательности целых чисел 
 
 var expectedArray = new double[] { 1.1, 4.3, 4.5558139534883715, 5.499662855989648, 6.328043444542756, 7.197137170618942, 8.076381694452097, 8.967515551531049, 9.868142001303216, 10.77687594031086 };
 var expectedCount = expectedArray.Length;
 
-//var count = 16;
 var doubles = new DoubleSequenceGenerator(1.1, 4.3);
 var newDoubles = new List<double>(doubles.Count) { doubles.Previous, doubles.Current };
 
@@ -152,28 +151,59 @@ Console.WriteLine("----------");
 
 Console.WriteLine($"expectedArray2 is equal to newDoubles2: {expectedArray2.SequenceEqual(newDoubles2)}");
 Console.WriteLine($"newDoubles2.Count == expectedCount2: {newDoubles2.Count == expectedCount2}");
+*/
 
+/* Пример 4. Проверка создания последовательности символов */
 
-/* Пример 4. Проверка создания последовательности символов 
+var expectedSequence = new List<char> { 'A', 'B', 'B', 'C', 'D', 'F', 'I', 'N', 'V', 'I' };
+var expectedCount = expectedSequence.Count;
 
-var count = 7;
-var chars = new CharSequenceGenerator('A', 'B').CharSequance;
+var chars = new CharSequenceGenerator('A', 'B');
+var actualSequence = new List<char>(chars.Count) { chars.Previous, chars.Current };
 
-var chars2 = new CharSequenceGenerator('d', 'l', count).CharSequance;
+int i;
+for (i = 1; i <= chars.Count - 2; i++)
+{
+    actualSequence.Add(chars.Next);
+}
 
-var i = 1;
-foreach (char item in chars)
+i = 1;
+foreach (char item in actualSequence)
 {
     Console.WriteLine($"{i++}: {item}");
 }
 Console.WriteLine("----------");
 
+Console.WriteLine($"expectedSequence is equal to actualSequence: {expectedSequence.SequenceEqual(actualSequence)}");
+Console.WriteLine($"actualSequence.Count == expectedCount: {expectedSequence.Count == expectedCount}");
+
+Console.WriteLine("----------");
+
+var expectedSequence2 = new List<char> { 'd', 'l', 'A', 'R', 'R', 'I', 'Z' };
+var expectedCount2 = expectedSequence2.Count;
+
+var count = 7;
+var chars2 = new CharSequenceGenerator('d', 'l', count);
+var actualSequence2 = new List<char>(chars2.Count) { chars2.Previous, chars2.Current };
+
 i = 1;
-foreach (char item in chars2)
+for (i = 1; i <= chars2.Count - 2; i++)
+{
+    actualSequence2.Add(chars2.Next);
+}
+
+i = 1;
+foreach (char item in actualSequence2)
 {
     Console.WriteLine($"{i++}: {item}");
 }
-*/
+Console.WriteLine("----------");
+
+Console.WriteLine($"expectedSequence2 is equal to actualSequence2: {expectedSequence2.SequenceEqual(actualSequence2)}");
+Console.WriteLine($"actualSequence2.Count == expectedCount2: {expectedSequence2.Count == expectedCount2}");
+
+Console.WriteLine("----------");
+
 
 /* Пример 5. Проверка создания универсальной последовательности 
 
