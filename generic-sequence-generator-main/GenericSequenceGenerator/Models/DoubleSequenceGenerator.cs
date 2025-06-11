@@ -2,10 +2,10 @@ namespace GenericSequenceGenerator.Models
 {
     public class DoubleSequenceGenerator : SequenceGenerator<double>
     {
-        public DoubleSequenceGenerator(double previous, double current, int count = 10)
+        public DoubleSequenceGenerator(double previous, double current)
             : base(previous, current)
         {
-            this.Count = count;
+            this.SetCount(10);
         }
 
         /// <summary>
@@ -13,13 +13,14 @@ namespace GenericSequenceGenerator.Models
         /// </summary>
         /// <returns>Следующий элемент колекции.</returns>
         /// <exception cref="Exception">DivideByZeroException.</exception>
-        public override double GetNext()
+        internal override double GetNext()
         {
             if (this.Current != 0.0)
             {
                 double next = this.Current + (this.Previous / this.Current);
-                this.Previous = this.Current;
-                this.Current = next;
+                this.SetNext(next);
+                this.SetPrevous(this.Current);
+                this.SetCurrent(next);
                 return next;
             }
             else

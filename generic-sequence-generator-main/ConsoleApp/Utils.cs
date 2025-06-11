@@ -12,8 +12,13 @@ namespace ConsoleApp
         /// <param name="sequenceGenerator">Объект класса, производного от SequenceGenetator<T>, кот. содержит первичные данные для создания последовательности элементов обобщенного типа (два первых элемента, количество элементов последовательности).</param>
         /// <param name="initCollection">Создаваемая в цикле последовательность элементов обобщенного типа.</param>
         /// <returns>Последовательность элементов обобщенного типа.</returns>
-        public static List<T> CreateFullSequence<T>(SequenceGenerator<T> sequenceGenerator, List<T> initCollection)
+        public static List<T> CreateFullSequence<T>(SequenceGenerator<T> sequenceGenerator, List<T> initCollection, int count = 0)
         {
+            if (count != 0 && sequenceGenerator.Count != count)
+            {
+                sequenceGenerator.SetCount(count);
+            }
+
             int i;
             for (i = 1; i <= sequenceGenerator.Count - 2; i++)
             {

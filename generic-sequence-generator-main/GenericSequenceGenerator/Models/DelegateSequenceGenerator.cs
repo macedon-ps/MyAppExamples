@@ -23,11 +23,11 @@ namespace GenericSequenceGenerator.Models
         /// <param name="current">Данный элемент последовательности.</param>
         /// <param name="myFunc">Делегат, указывающий на метод расчета следующего элемента последовательности.</param>
         /// <param name="count">Количество элементов последавтельности.</param>
-        public DelegateSequenceGenerator(T previous, T current, Func<T, T, T> myFunc, int count = 10)
+        public DelegateSequenceGenerator(T previous, T current, Func<T, T, T> myFunc)
             : base(previous, current)
         {
-            this.Count = count;
             this.MyFunc = myFunc;
+            this.SetCount(10);
         }
 
         /// <summary>
@@ -38,8 +38,9 @@ namespace GenericSequenceGenerator.Models
         public T GetNext(Func<T, T, T> myFunc)
         {
             var next = myFunc(this.Previous, this.Current);
-            this.Previous = this.Current;
-            this.Current = next;
+            this.SetNext(next);
+            this.SetPrevous(this.Current);
+            this.SetCurrent(next);
             return next;
         }
 
@@ -67,7 +68,7 @@ namespace GenericSequenceGenerator.Models
         /// <returns>Следующий элемент последовательности.</returns>
         public double DoubleNext(double prev, double curr) => curr + (prev / curr);
 
-        public override T GetNext()
+        internal override T GetNext()
         {
             return this.GetNext(this.MyFunc);
         }

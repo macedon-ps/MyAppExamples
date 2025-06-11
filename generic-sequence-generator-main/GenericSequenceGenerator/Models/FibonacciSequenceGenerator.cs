@@ -2,21 +2,22 @@ namespace GenericSequenceGenerator.Models
 {
     public class FibonacciSequenceGenerator : SequenceGenerator<int>
     {
-        public FibonacciSequenceGenerator(int previous, int current, int count = 20)
+        public FibonacciSequenceGenerator(int previous, int current)
             : base(previous, current)
         {
-            this.Count = count;
+            this.SetCount(20);
         }
 
         /// <summary>
         /// Метод вычисчисления следующего элемента последовательности GetNext().
         /// </summary>
         /// <returns>Следующий элемент последовательности.</returns>
-        public override int GetNext()
+        internal override int GetNext()
         {
             int next = this.Previous + this.Current;
-            this.Previous = this.Current;
-            this.Current = next;
+            this.SetNext(next);
+            this.SetPrevous(this.Current);
+            this.SetCurrent(next);
             return next;
         }
     }

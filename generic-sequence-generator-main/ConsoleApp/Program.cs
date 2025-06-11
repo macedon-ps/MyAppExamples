@@ -1,4 +1,6 @@
+using System.Reflection;
 using ConsoleApp;
+using GenericSequenceGenerator.Interfaces;
 using GenericSequenceGenerator.Models;
 
 /* Пример 1. Проверка создания последовательности чисел Фибоначчи 
@@ -15,11 +17,10 @@ Utils<int>.ShowSequenceInfo(actualFibonacciSequence, expectedArray.ToList());
 var expectedArray2 = new int[] { 3, 7, 10, 17, 27, 44, 71, 115, 186, 301, 487, 788, 1275 };
 
 var count = 13;
-
-var fibonacciesGenerator2 = new FibonacciSequenceGenerator(3, 7, count);
+var fibonacciesGenerator2 = new FibonacciSequenceGenerator(3, 7);
 var initFibonacciSequence2 = new List<int>(fibonacciesGenerator2.Count) { fibonacciesGenerator2.Previous, fibonacciesGenerator2.Current };
 
-var actualFibonacciSequence2 = Utils<int>.CreateFullSequence(fibonacciesGenerator2, initFibonacciSequence2);
+var actualFibonacciSequence2 = Utils<int>.CreateFullSequence(fibonacciesGenerator2, initFibonacciSequence2, count);
 Utils<int>.ShowSequenceInfo(actualFibonacciSequence2, expectedArray2.ToList());
 */
 
@@ -37,10 +38,10 @@ Utils<int>.ShowSequenceInfo(actualIntegerSequence, expectedArray.ToList());
 var expectedArray2 = new int[] { 4, 11, 34, 116, 424, 1616, 6304, 24896 };
 
 var count = 8;
-var integersGenerator2 = new IntegerSequenceGenerator(4, 11, count);
+var integersGenerator2 = new IntegerSequenceGenerator(4, 11);
 var initIntegersSequence2 = new List<int>(integersGenerator2.Count) { integersGenerator2.Previous, integersGenerator2.Current };
 
-var actualIntegerSequence2 = Utils<int>.CreateFullSequence(integersGenerator2, initIntegersSequence2);
+var actualIntegerSequence2 = Utils<int>.CreateFullSequence(integersGenerator2, initIntegersSequence2, count);
 Utils<int>.ShowSequenceInfo(actualIntegerSequence2, expectedArray2.ToList());
 */
 
@@ -58,10 +59,10 @@ Utils<double>.ShowSequenceInfo(actualDoubleSequence, expectedArray.ToList());
 var expectedArray2 = new double[] { 3.3, 6.8, 7.285294117647059, 8.21868127953644, 9.105112310240429, 10.007757000333156, 10.917562495204516 };
 
 var count = 7;
-var doublesGenerator2 = new DoubleSequenceGenerator(3.3, 6.8, count);
+var doublesGenerator2 = new DoubleSequenceGenerator(3.3, 6.8);
 var initDoubleSequence2 = new List<double>(doublesGenerator2.Count) { doublesGenerator2.Previous, doublesGenerator2.Current };
 
-var actualDoubleSequence2 = Utils<double>.CreateFullSequence(doublesGenerator2, initDoubleSequence2);
+var actualDoubleSequence2 = Utils<double>.CreateFullSequence(doublesGenerator2, initDoubleSequence2, count);
 Utils<double>.ShowSequenceInfo(actualDoubleSequence2, expectedArray2.ToList());
 */
 
@@ -79,14 +80,14 @@ Utils<char>.ShowSequenceInfo(actualCharSequence, expectedCharSequence);
 var expectedCharSequence2 = new List<char> { 'd', 'l', 'A', 'R', 'R', 'I', 'Z' };
 
 var count = 7;
-var charsGenerator2 = new CharSequenceGenerator('d', 'l', count);
+var charsGenerator2 = new CharSequenceGenerator('d', 'l');
 var initCharlSequence2 = new List<char>(charsGenerator2.Count) { charsGenerator2.Previous, charsGenerator2.Current };
 
-var actualCharSequence2 = Utils<char>.CreateFullSequence(charsGenerator2, initCharlSequence2);
+var actualCharSequence2 = Utils<char>.CreateFullSequence(charsGenerator2, initCharlSequence2, count);
 Utils<char>.ShowSequenceInfo(actualCharSequence2, expectedCharSequence2);
 */
 
-/* Пример 5. Проверка создания универсальной последовательности */
+/* Пример 5. Проверка создания универсальной последовательности 
 // 5.1.1. 
 var expectedFibonacciArray = new int[] { 2, 5, 7, 12, 19, 31, 50, 81, 131, 212 };
 
@@ -100,10 +101,10 @@ Utils<int>.ShowSequenceInfo(actualFibonacciSequence, expectedFibonacciArray.ToLi
 var expectedFibonacciArray2 = new int[] { 4, 8, 12, 20, 32, 52, 84, 136 };
 
 var count = 8;
-var fibonacciesGenerator2 = new DelegateSequenceGenerator<int>(4, 8, fibonacciNext, count);
+var fibonacciesGenerator2 = new DelegateSequenceGenerator<int>(4, 8, fibonacciNext);
 var initFibonacciSequence2 = new List<int>(fibonacciesGenerator2.Count) { fibonacciesGenerator2.Previous, fibonacciesGenerator2.Current };
 
-var actualFibonacciSequence2 = Utils<int>.CreateFullSequence(fibonacciesGenerator2, initFibonacciSequence2);
+var actualFibonacciSequence2 = Utils<int>.CreateFullSequence(fibonacciesGenerator2, initFibonacciSequence2, count);
 Utils<int>.ShowSequenceInfo(actualFibonacciSequence2, expectedFibonacciArray2.ToList());
 
 //// 5.2.1.
@@ -119,10 +120,10 @@ Utils<int>.ShowSequenceInfo(actualIntegerSequence, expectedIntegerArray.ToList()
 var expectedIntegerArray2 = new int[] { 4, 15, 58, 228, 904, 3600 };
 
 count = 6;
-var integersGenerator2 = new DelegateSequenceGenerator<int>(4, 15, integerNext, count);
+var integersGenerator2 = new DelegateSequenceGenerator<int>(4, 15, integerNext);
 var initIntegerSequence2 = new List<int>(integersGenerator2.Count) { integersGenerator2.Previous, integersGenerator2.Current };
 
-var actualIntegerSequence2 = Utils<int>.CreateFullSequence(integersGenerator2, initIntegerSequence2);
+var actualIntegerSequence2 = Utils<int>.CreateFullSequence(integersGenerator2, initIntegerSequence2, count);
 Utils<int>.ShowSequenceInfo(actualIntegerSequence2, expectedIntegerArray2.ToList());
 
 //// 5.3.1.
@@ -138,10 +139,10 @@ Utils<double>.ShowSequenceInfo(actualDoubleSequence, expectedDoubleArray.ToList(
 var expectedDoubleArray2 = new double[] { 3.7, 16.9, 17.1189349112426, 18.106145861434438, 19.05162233347068, 20.001995248937558 };
 
 count = 6;
-var doublesGenerator2 = new DelegateSequenceGenerator<double>(3.7, 16.9, doubleNext, count);
+var doublesGenerator2 = new DelegateSequenceGenerator<double>(3.7, 16.9, doubleNext);
 var initDoubleSequence2 = new List<double>(doublesGenerator2.Count) { doublesGenerator2.Previous, doublesGenerator2.Current };
 
-var actualDoubleSequence2 = Utils<double>.CreateFullSequence(doublesGenerator2, initDoubleSequence2);
+var actualDoubleSequence2 = Utils<double>.CreateFullSequence(doublesGenerator2, initDoubleSequence2, count);
 Utils<double>.ShowSequenceInfo(actualDoubleSequence2, expectedDoubleArray2.ToList());
 
 
@@ -150,4 +151,45 @@ int fibonacciNext(int prev, int curr) => prev + curr;
 int integerNext(int prev, int curr) => (6 * curr) - (8 * prev);
 
 double doubleNext(double prev, double curr) => curr + (prev / curr);
+*/
+
+/* Пример 6. Проверка содержимого типов через рефлексию */
+
+var type = typeof(ISequenceGenerator<>);
+
+var properties = type.GetProperties(BindingFlags.Public | BindingFlags.Instance);
+var requiredProperties = new[] { "Previous", "Current", "Next" };
+
+foreach (var property in requiredProperties)
+{
+    if(properties.Any(p => p.Name == property))
+    {
+        Console.WriteLine($"Property '{property}' is existing in ISequenceGenerator.");
+    }
+    else
+    {
+        Console.WriteLine($"Property '{property}' is missing in ISequenceGenerator.");
+    }
+}
+
+foreach (var property in properties)
+{
+    if(property.CanRead)
+    {
+        Console.WriteLine($"Property '{property.Name}' can read.");
+    }
+    else
+    {
+        Console.WriteLine($"Property '{property.Name}' cannot read.");
+    }
+
+    if (property.CanWrite)
+    {
+        Console.WriteLine($"Property '{property.Name}' can write.");
+    }
+    else
+    {
+        Console.WriteLine($"Property '{property.Name}' cannot write.");
+    }
+}
 

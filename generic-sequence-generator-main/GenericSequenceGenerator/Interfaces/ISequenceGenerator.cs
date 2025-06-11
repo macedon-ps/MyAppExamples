@@ -2,10 +2,10 @@ namespace GenericSequenceGenerator.Interfaces
 {
     public interface ISequenceGenerator<T>
     {
-        T Previous { get; set; }
+        T Previous { get; }
 
-        T Current { get; set; }
+        T Current { get; }
 
-        T Next { get; set; }
+        T Next { get; }
     }
 }
