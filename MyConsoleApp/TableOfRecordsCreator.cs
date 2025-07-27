@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Data;
+using System.Linq;
 using System.Reflection;
 using System.Text;
 
@@ -26,42 +27,34 @@ public static class TableOfRecordsCreator
         ArgumentNullException.ThrowIfNull(writer);
         Guard.ThrowIfNullOrEmpty(collection, nameof(collection));
 
-        // найдем свойства типа Т, их количество, имена, ширины в таблице, которые занимают соответствующие данные
+        // we will find the properties of type T, their number, names, widths in the table, which occupy the corresponding data
         var properties = typeof(T).GetProperties();
         var propertiesNumber = properties.Length;
         var propertiesNames = GetPropertiesNames(properties);
         var propertiesDataWidths = GetPropertiesDataWidths(collection, properties);
 
+        // format string for composite formatting
         var stringFormat = StringFormat(propertiesNumber, propertiesDataWidths);
 
         using (writer)
         {
             var simpleRowTable = GetSimpleRowTable(propertiesNumber, propertiesDataWidths);
-            var titleRowTable = GetTitleRowTable(propertiesNumber, propertiesDataWidths, propertiesNames);
-
+            
             var result = new StringBuilder();
 
+            // Header of table
             result.AppendLine(simpleRowTable);
-            result.AppendLine(string.Format(stringFormat, "Ghbdtn", "hj", "dghjhu"));
+            result.AppendLine(string.Format(stringFormat, propertiesNames));
             result.AppendLine(simpleRowTable);
 
+            foreach (var item in collection)
+            {
+                var data = GetPropertiesValues(properties, item);
 
-
-            //writer.WriteLine("+---------------------+-----+--------+");
-            //writer.WriteLine("|{0,-21}|{1,-5}|{2,-8}|", "FullName", "Age", "Phone", "|");
-            //writer.WriteLine("+---------------------+-----+--------+");
-
-            //if (collection.GetType().FullName.Contains("ProfileBasic"))
-            //{
-            //    writer.WriteLine($"|{0,-21}|{1,5}|{2,-8}|", $"FullName", "Age", "Phone");
-            //    writer.WriteLine("+---------------------+-----+--------+");
-
-            //    foreach (var item in collection)
-            //    {
-            //        writer.WriteLine($"|{0,-21}|{1,5}|{2,-8}|", $"FullName", "Age", "Phone");
-            //        writer.WriteLine("+---------------------+-----+--------+");
-            //    }
-            //}
+                // Body of table
+                result.AppendLine(string.Format(stringFormat, data));
+                result.AppendLine(simpleRowTable);
+            }
 
             var resultStringTable = result.ToString();
 
@@ -69,6 +62,69 @@ public static class TableOfRecordsCreator
         }
     }
 
+    /// <summary>
+    /// Method for creating an array of strings with type property names.
+    /// </summary>
+    /// <param name="properties">Type property.</param>
+    /// <returns>Array of strings with type property names.</returns>
+    private static string[] GetPropertiesNames(PropertyInfo[] properties)
+    {
+        var propertiesNames = new string[properties.Length];
+
+        for (int i = 0; i < properties.Length; i++)
+        {
+            propertiesNames[i] = properties[i].Name;
+        }
+
+        return propertiesNames;
+    }
+
+    /// <summary>
+    /// Method for creating an array of table column widths.
+    /// </summary>
+    /// <typeparam name="T">Generic type T.</typeparam>
+    /// <param name="collection">Collection of items.</param>
+    /// <param name="properties">Properties of type.</param>
+    /// <returns>Array of table column widths.</returns>
+    private static int[] GetPropertiesDataWidths<T>(ICollection<T> collection, PropertyInfo[] properties)
+    {
+        int[] propertiesDataWidths = properties
+            .Select(p => collection.Select(c => p.GetValue(c)?.ToString()?.Length ?? 0)
+            .Max())
+            .ToArray();
+
+        return propertiesDataWidths;
+    }
+
+    /// <summary>
+    /// Method for creating a format string for composite formatting.
+    /// </summary>
+    /// <param name="propertiesNumber">Numbers of properties of type.</param>
+    /// <param name="propertiesDataWidths">Widths for table's columns.</param>
+    /// <returns>Format string for composite formatting.</returns>
+    private static string StringFormat(int propertiesNumber, int[] propertiesDataWidths)
+    {
+        var buildFormat = new StringBuilder();
+
+        for (int i = 0; i < propertiesNumber; i++)
+        {
+            buildFormat.Append('|').Append('{').Append($"{i}, -{propertiesDataWidths[i]}").Append(('}'));
+
+            if (i == propertiesDataWidths.Length - 1)
+            {
+                buildFormat.Append('|');
+            }
+        }
+
+        return buildFormat.ToString();
+    }
+
+    /// <summary>
+    /// Method for creating table's row with only symbols.
+    /// </summary>
+    /// <param name="propertiesNumber">Numbers of properties of type.</param>
+    /// <param name="propertiesDataWidths">Array of table column widths.</param>
+    /// <returns>Table's row with only symbols.</returns>
     private static string GetSimpleRowTable(int propertiesNumber, int[] propertiesDataWidths)
     {
         var simpleRow = new StringBuilder();
@@ -86,72 +142,26 @@ public static class TableOfRecordsCreator
         return simpleRow.ToString();
     }
 
-    private static string GetTitleRowTable(int propertiesNumber, int[] propertiesDataWidths, string[] propertiesNames)
+    /// <summary>
+    /// Method for creating an array of type properties values.
+    /// </summary>
+    /// <typeparam name="T">Generic type T.</typeparam>
+    /// <param name="properties">Type's properties.</param>
+    /// <param name="item">Item of collection.</param>
+    /// <returns>Array of type properties values.</returns>
+    private static object[] GetPropertiesValues<T>(PropertyInfo[] properties, T? item)
     {
-        var titleRow = new StringBuilder();
+        var valuesList = new List<object>();
 
-        for (var i = 0; i < propertiesNumber; i++)
+        foreach (var prop in properties)
         {
-            var str = $"{{{i}, {propertiesDataWidths[i]}}} ";
-            titleRow.Append(str);
-
-            if (i == propertiesNumber - 1)
-            {
-                titleRow.Append(", ");
-            }
+            var data = prop.GetValue(item, null);
+            valuesList.Add(data);
         }
 
-        for (var i = 0; i < propertiesNumber; i++)
-        {
-            var str = $"{propertiesNames[i]}";
-            titleRow.Append(str);
-
-            if (i != propertiesNumber - 1)
-            {
-                titleRow.Append(", ");
-            }
-        }
-
-        var title = titleRow.ToString();
-        //var titleData = string.Format(stringFormat, propertiesNames);
-
-        return title;
+        return valuesList.ToArray();
     }
-
-    private static string[] GetPropertiesNames(PropertyInfo[] properties)
-    {
-        var propertiesNames = new string[properties.Length];
-
-        for (int i = 0; i < properties.Length; i++)
-        {
-            propertiesNames[i] = properties[i].Name;
-        }
-
-        return propertiesNames;
-    }
-
-    private static int[] GetPropertiesDataWidths<T>(ICollection<T> collection, PropertyInfo[] properties)
-    {
-        int[] propertiesDataWidths = properties
-            .Select(p => collection.Select(c => p.GetValue(c)?.ToString()?.Length ?? 0)
-            .Max())
-            .ToArray();
-
-        return propertiesDataWidths;
-    }
-
-    private static string StringFormat(int propertiesNumber, int[] propertiesDataWidths)
-    {
-        var buildFormat = new StringBuilder();
-
-        for (int i = 0; i < propertiesNumber; i++)
-        {
-            buildFormat.Append('{').Append($"{i}, -{propertiesDataWidths[i]}").Append(('}')).Append(" ");
-        }
-
-        return buildFormat.ToString();
-    }
-
+        
     public static class Guard
     {
         public static void ThrowIfNullOrEmpty<T>(ICollection<T> collection, string paramName)
