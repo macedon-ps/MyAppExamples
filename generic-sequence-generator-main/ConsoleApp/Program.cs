@@ -45,7 +45,7 @@ var actualIntegerSequence2 = Utils<int>.CreateFullSequence(integersGenerator2, i
 Utils<int>.ShowSequenceInfo(actualIntegerSequence2, expectedArray2.ToList());
 */
 
-/* Пример 3. Проверка создания последовательности целых чисел 
+/* Пример 3. Проверка создания последовательности вещественных чисел 
 // 3.1.
 var expectedArray = new double[] { 1.1, 4.3, 4.5558139534883715, 5.499662855989648, 6.328043444542756, 7.197137170618942, 8.076381694452097, 8.967515551531049, 9.868142001303216, 10.77687594031086 };
 
@@ -87,7 +87,7 @@ var actualCharSequence2 = Utils<char>.CreateFullSequence(charsGenerator2, initCh
 Utils<char>.ShowSequenceInfo(actualCharSequence2, expectedCharSequence2);
 */
 
-/* Пример 5. Проверка создания универсальной последовательности 
+/* Пример 5. Проверка создания универсальной последовательности */
 // 5.1.1. 
 var expectedFibonacciArray = new int[] { 2, 5, 7, 12, 19, 31, 50, 81, 131, 212 };
 
@@ -151,9 +151,9 @@ int fibonacciNext(int prev, int curr) => prev + curr;
 int integerNext(int prev, int curr) => (6 * curr) - (8 * prev);
 
 double doubleNext(double prev, double curr) => curr + (prev / curr);
-*/
 
-/* Пример 6. Проверка содержимого типов через рефлексию */
+
+/* Пример 6. Проверка содержимого типов через рефлексию 
 
 var type = typeof(ISequenceGenerator<>);
 
@@ -192,4 +192,4 @@ foreach (var property in properties)
         Console.WriteLine($"Property '{property.Name}' cannot write.");
     }
 }
-
+*/
