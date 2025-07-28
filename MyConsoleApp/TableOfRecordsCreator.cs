@@ -1,6 +1,4 @@
-﻿using System.Data;
-using System.Linq;
-using System.Reflection;
+﻿using System.Reflection;
 using System.Text;
 
 namespace TableOfRecords;
@@ -31,14 +29,21 @@ public static class TableOfRecordsCreator
         var properties = typeof(T).GetProperties();
         var propertiesNumber = properties.Length;
         var propertiesNames = GetPropertiesNames(properties);
-        var propertiesDataWidths = GetPropertiesDataWidths(collection, properties);
+
+        var isRightPositionDataArray = GetRightPositionDataArray(properties);
+
+        var dataColumnsWidthsArrey = GetPropertiesDataWidths(collection, properties);
+        
+        int intentRight = 1;
+        int intentLeft = 1;
+        var chanchedDataColumsWidthsArrey = GetChanchedDataColumnsWidths(dataColumnsWidthsArrey, intentRight, intentLeft);
 
         // format string for composite formatting
-        var stringFormat = StringFormat(propertiesNumber, propertiesDataWidths);
+        var stringFormat = StringFormat(propertiesNumber, chanchedDataColumsWidthsArrey, isRightPositionDataArray);
 
         using (writer)
         {
-            var simpleRowTable = GetSimpleRowTable(propertiesNumber, propertiesDataWidths);
+            var simpleRowTable = GetSimpleRowTable(propertiesNumber, chanchedDataColumsWidthsArrey);
             
             var result = new StringBuilder();
 
@@ -52,7 +57,7 @@ public static class TableOfRecordsCreator
                 var data = GetPropertiesValues(properties, item);
 
                 // Body of table
-                result.AppendLine(string.Format(stringFormat, data));
+                result.AppendLine(string.Format(stringFormat, data).PadRight(1).PadLeft(1));
                 result.AppendLine(simpleRowTable);
             }
 
@@ -63,9 +68,51 @@ public static class TableOfRecordsCreator
     }
 
     /// <summary>
+    /// Method for getting an array of boolean values to arrange values on the right or left side of a column.
+    /// </summary>
+    /// <param name="properties">Type's properties.</param>
+    /// <returns>Array of boolean values to arrange values on the right or left side of a column.</returns>
+    private static bool[] GetRightPositionDataArray(PropertyInfo[] properties)
+    {
+        var isRightPositionDataArray = new bool[properties.Length];
+
+        for (int i = 0; i < properties.Length; i++) 
+        {
+            if (properties[i].PropertyType == typeof(int) || properties[i].PropertyType == typeof(double) || properties[i].PropertyType == typeof(DateTime)) 
+            {
+                isRightPositionDataArray[i] = true;
+            }
+            else 
+            {
+            isRightPositionDataArray[i] = false;
+            }
+        }
+
+        return isRightPositionDataArray;
+    }
+
+    /// <summary>
+    /// Method for changing table column widths by adding paddings.
+    /// </summary>
+    /// <param name="dataColumnsWidthsArrey">Array of initial table column widths.</param>
+    /// <param name="intentRight">Right indent.</param>
+    /// <param name="intentLeft">Lift indent.</param>
+    /// <returns>Array of result table column widths.</returns>
+    private static int[] GetChanchedDataColumnsWidths(int[] dataColumnsWidthsArrey, int intentRight = 1, int intentLeft = 1)
+    {
+        var changedColumnsWidthsArrey = new int[dataColumnsWidthsArrey.Length];
+        for (int i = 0; i < dataColumnsWidthsArrey.Length; i++) 
+        {
+            changedColumnsWidthsArrey[i] = dataColumnsWidthsArrey[i] + intentRight + intentLeft;
+        }
+
+        return changedColumnsWidthsArrey;
+    }
+
+    /// <summary>
     /// Method for creating an array of strings with type property names.
     /// </summary>
-    /// <param name="properties">Type property.</param>
+    /// <param name="properties">Type's properties.</param>
     /// <returns>Array of strings with type property names.</returns>
     private static string[] GetPropertiesNames(PropertyInfo[] properties)
     {
@@ -88,10 +135,22 @@ public static class TableOfRecordsCreator
     /// <returns>Array of table column widths.</returns>
     private static int[] GetPropertiesDataWidths<T>(ICollection<T> collection, PropertyInfo[] properties)
     {
-        int[] propertiesDataWidths = properties
-            .Select(p => collection.Select(c => p.GetValue(c)?.ToString()?.Length ?? 0)
-            .Max())
-            .ToArray();
+        // we determine the width of each column with indents
+        var propertiesDataWidths = new int[properties.Length];
+
+        for (int i = 0; i < properties.Length; i++)
+        {
+            propertiesDataWidths[i] = properties[i].Name.Length;
+        }
+
+        foreach (var item in collection)
+        {
+            for (int i = 0; i < properties.Length; i++)
+            {
+                var value = properties[i].GetValue(item)?.ToString() ?? string.Empty;
+                propertiesDataWidths[i] = Math.Max(propertiesDataWidths[i], value.Length);
+            }
+        }
 
         return propertiesDataWidths;
     }
@@ -102,13 +161,20 @@ public static class TableOfRecordsCreator
     /// <param name="propertiesNumber">Numbers of properties of type.</param>
     /// <param name="propertiesDataWidths">Widths for table's columns.</param>
     /// <returns>Format string for composite formatting.</returns>
-    private static string StringFormat(int propertiesNumber, int[] propertiesDataWidths)
+    private static string StringFormat(int propertiesNumber, int[] propertiesDataWidths, bool[] isRightPositionDataArray)
     {
         var buildFormat = new StringBuilder();
 
         for (int i = 0; i < propertiesNumber; i++)
         {
-            buildFormat.Append('|').Append('{').Append($"{i}, -{propertiesDataWidths[i]}").Append(('}'));
+            buildFormat.Append('|').Append('{').Append($"{i}, ");
+
+            if (!isRightPositionDataArray[i]) 
+            {
+                buildFormat.Append('-');
+            }
+
+            buildFormat.Append($"{propertiesDataWidths[i]}").Append(('}'));
 
             if (i == propertiesDataWidths.Length - 1)
             {
