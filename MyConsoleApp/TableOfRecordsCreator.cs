@@ -28,12 +28,13 @@ public static class TableOfRecordsCreator
         // we will find the properties of type T, their number, names, widths in the table, which occupy the corresponding data
         var properties = typeof(T).GetProperties();
         var propertiesNumber = properties.Length;
-        var propertiesNames = GetPropertiesNames(properties);
 
         var isRightPositionDataArray = GetRightPositionDataArray(properties);
 
         var dataColumnsWidthsArrey = GetPropertiesDataWidths(collection, properties);
-        
+
+        var propertiesNames = GetPropertiesNames(properties, isRightPositionDataArray);
+                
         int intentRight = 1;
         int intentLeft = 1;
         var chanchedDataColumsWidthsArrey = GetChanchedDataColumnsWidths(dataColumnsWidthsArrey, intentRight, intentLeft);
@@ -54,10 +55,10 @@ public static class TableOfRecordsCreator
 
             foreach (var item in collection)
             {
-                var data = GetPropertiesValues(properties, item);
+                var data = GetPropertiesValues(properties, item, isRightPositionDataArray);
 
                 // Body of table
-                result.AppendLine(string.Format(stringFormat, data).PadRight(1).PadLeft(1));
+                result.AppendLine(string.Format(stringFormat, data));
                 result.AppendLine(simpleRowTable);
             }
 
@@ -114,13 +115,15 @@ public static class TableOfRecordsCreator
     /// </summary>
     /// <param name="properties">Type's properties.</param>
     /// <returns>Array of strings with type property names.</returns>
-    private static string[] GetPropertiesNames(PropertyInfo[] properties)
+    private static string[] GetPropertiesNames(PropertyInfo[] properties, bool[] isRightPositionDataArray)
     {
         var propertiesNames = new string[properties.Length];
 
         for (int i = 0; i < properties.Length; i++)
         {
-            propertiesNames[i] = properties[i].Name;
+            propertiesNames[i] = isRightPositionDataArray[i]
+            ? properties[i].Name.PadRight(properties[i].Name.Length + 1)
+            : properties[i].Name.PadLeft(properties[i].Name.Length + 1);
         }
 
         return propertiesNames;
@@ -215,14 +218,17 @@ public static class TableOfRecordsCreator
     /// <param name="properties">Type's properties.</param>
     /// <param name="item">Item of collection.</param>
     /// <returns>Array of type properties values.</returns>
-    private static object[] GetPropertiesValues<T>(PropertyInfo[] properties, T? item)
+    private static object[] GetPropertiesValues<T>(PropertyInfo[] properties, T? item, bool[] isRightPositionDataArray)
     {
         var valuesList = new List<object>();
 
-        foreach (var prop in properties)
+        for (int i = 0; i < properties.Length; i++)
         {
-            var data = prop.GetValue(item, null);
-            valuesList.Add(data);
+            var data = properties[i].GetValue(item, null).ToString();
+            var dataString = isRightPositionDataArray[i] 
+                ? data.PadRight(data.Length + 1)
+                : data.PadLeft(data.Length + 1);
+            valuesList.Add(dataString);
         }
 
         return valuesList.ToArray();
